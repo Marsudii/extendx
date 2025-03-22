@@ -1,7 +1,7 @@
 <div align="center">
 <p>
   <a href="#">
-    <img width="200" alt="Extendx" src="https://raw.githubusercontent.com/Marsudii/extendx/refs/heads/main/web/static/icon.png" />
+    <img width="200" alt="Extendx" src="https://raw.githubusercontent.com/Marsudii/extendx/refs/heads/main/docs/favicon/icon.png" />
   </a>
 </p>
 
