@@ -1,4 +1,13 @@
-# Extendx
+<p align="center">
+  <a href="https://" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://raw.githubusercontent.com/Marsudii/extendx/refs/heads/main/web/static/icon.png" alt="extendx logo">
+  </a>
+</p>
+<br/>
+<p align="center">
+
+</p>
+<br/>
 
 [![Github All Releases](https://img.shields.io/github/downloads/Marsudii/extendx/total.svg)]()
 ![Extendx Logo](https://raw.githubusercontent.com/Marsudii/extendx/refs/heads/main/web/static/icon.png)
