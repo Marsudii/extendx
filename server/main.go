@@ -53,19 +53,19 @@ func chooseMonitor() int {
 		fmt.Printf("[%d] %dx%d @ (%d,%d)\n", i, bounds.Dx(), bounds.Dy(), bounds.Min.X, bounds.Min.Y)
 	}
 
-	fmt.Print("Pilih monitor (nomor): ")
+	fmt.Print("Choose monitor (number): ")
 	reader := bufio.NewReader(os.Stdin)
 	input, _ := reader.ReadString('\n')
 	input = strings.TrimSpace(input)
 	index, err := strconv.Atoi(input)
 	if err != nil || index < 0 || index >= displayCount {
-		log.Fatalf("❌ Input monitor tidak valid.")
+		log.Fatalf("❌ Input monitor not valid.")
 	}
 	return index
 }
 
 func main() {
-	quality := flag.Int("q", 40, "WebP quality (0-100)")
+	quality := flag.Int("q", 100, "WebP quality (0-100)")
 	width := flag.Int("w", 960, "Resize width")
 	height := flag.Int("h", 540, "Resize height")
 	port := flag.String("port", "8088", "Server port")

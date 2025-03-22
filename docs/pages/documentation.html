@@ -41,16 +41,15 @@
     <fieldset>
       <legend>Table Of Contents</legend>
       <ul>
-        <li><a href="#about"><b>API Routes</a></b>
+        <li><a href="#introduction"><b>Introduction</a></b>
           <ul>
-            <li><a href="#api_route_1">API Route: Hello World</a></li>
-            <li><a href="#api_route_2">API Route: Foo Bar</a></li>
-            <li><a href="#about">I'm a hyperlink</a></li>
+            <li><a href="#server">Server</a></li>
+            <li><a href="#client">CLient</a></li>
           </ul>
 
       </ul>
       <ul>
-        <li><a href="#about2"><b>Code Snippets</a></b>
+        <li><a href="#about2"><b>Installation</a></b>
           <ul>
             <li><a href="#markdown_example">Markdown Post Example</a></li>
             <li><a href="#syntax_highlighting">Syntax Highlighting</a></li>
@@ -59,30 +58,48 @@
     </fieldset>
 
     <article>
-      <h1 id="about">API Routes</h1>
+      <h1 id="#introduction">Introduction</h1>
       <p>
-        Lorem ipsum dolor sit amet, <b>consectetur adipisicing elit</b>, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud <em>exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat</em>. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-        non proident, <mark>SUPER IMPORTANT</mark>
+        Extendx is an open-source <b>Go</b> based application designed to help streamers do screen sharing
+        between devices/platforms without the need for a capture card.
       </p>
-      <h3>Get Hello World</h3>
-      <br>
-      <kbd id="api_route_1">GET /HelloWorld</kbd>
-      <br>
-      <h3>Get Foo Bar</h3>
-      <br>
-      <kbd id="api_route_2">GET /FooBar</kbd>
-
-      </p>
+      <h3 id="server">Server</h3>
+      <p>The server is a screen capture that you want to share on the client side based on IP address.</p>
+      <h3 id="client">Client</h3>
+      <p>Client is the one who takes the screenshot from the server based on the ip</p>
     </article>
     <footer>
     </footer>
 
     <article>
-      <h1 id="about2">Code Snippets</h1>
+      <h1 id="about2">How to usage</h1>
+      <h2>Server</h2>
+      <h4>- Mac OS</h4>
+      <ul>
+        <li>Download the app from the <a href="https://github.com/Marsudii/extendx/releases/">releases</a> page.</li>
+        <li>Enter the downloaded folder and then run it in the terminal
+          <pre>./extend-server</pre>
+        </li>
+        <li>Server Automatic detect IP and monitor
+          <pre>
+          <code class="text-white">
+            IP LOCAL YOU: 10.10.10.7
+            🖥️ Available 2 monitor:
+            [0] 1680x1050 @ (0,0)
+            [1] 2560x1440 @ (-404,-1440)
+            Choose monitor (number):
+       </code>
+       </pre>
+        </li>
+        <li>
+
+        </li>
+      </ul>
+      <h3>- Windows</h3>
+      <h3>- Linux (soon)</h3>
+
+
+      <h2>Client</h2>
       <p>
         Lorem ipsum dolor sit amet, <b>consectetur adipisicing elit</b>, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -125,215 +142,6 @@
 
 
 
-    <article>
-      <h1 id="markdown_example">Markdown Example</h1>
-      <md>
-
-        You can write / use Markdown Content in Simply Docs with literal EASE! Thanks to an awesome tool of ours -
-        [Markdown Tag](https://github.com/MarketingPipeline/Markdown-Tag)
-
-
-
-        ### How to use Markdown Content in [Simply Docs](https://github.com/MarketingPipeline/Simply-Docs)
-
-
-
-        &lt;md&gt;# Put your markdown content here &lt;/md&gt;
-
-
-        That's it! Simply as that! <br>
-
-
-
-
-        This post is all wrote in markdown :)
-
-        You will love this!
-
-        ---
-
-        # h1 Heading 8-)
-        ## h2 Heading
-        ### h3 Heading
-        #### h4 Heading
-        ##### h5 Heading
-        ###### h6 Heading
-
-
-        ## Horizontal Rules
-
-        ___
-
-        ---
-
-        ***
-
-
-        ## Typographic replacements
-
-        Enable typographer option to see result.
-
-        (c) (C) (r) (R) (tm) (TM) (p) (P) +-
-
-        test.. test... test..... test?..... test!....
-
-        !!!!!! ???? ,, -- ---
-
-        "Smartypants, double quotes" and 'single quotes'
-
-
-        ## Emphasis
-
-        **This is bold text**
-
-        __This is bold text__
-
-        *This is italic text*
-
-        _This is italic text_
-
-        ~~Strikethrough~~
-
-
-        ## Blockquotes
-
-
-        > Blockquotes can also be nested...
-        >> ...by using additional greater-than signs right next to each other...
-        > > > ...or with spaces between arrows.
-
-
-        ## Lists
-
-        Unordered
-
-        + Create a list by starting a line with `+`, `-`, or `*`
-        + Sub-lists are made by indenting 2 spaces:
-        - Marker character change forces new list start:
-        * Ac tristique libero volutpat at
-        + Facilisis in pretium nisl aliquet
-        - Nulla volutpat aliquam velit
-        + Very easy!
-
-        Ordered
-
-        1. Lorem ipsum dolor sit amet
-        2. Consectetur adipiscing elit
-        3. Integer molestie lorem at massa
-
-
-        1. You can use sequential numbers...
-        1. ...or keep all the numbers as `1.`
-
-        Start numbering with offset:
-
-        57. foo
-        1. bar
-
-
-        ## Code
-
-        Inline `code`
-
-        Indented code
-
-        // Some comments
-        line 1 of code
-        line 2 of code
-        line 3 of code
-
-
-        Block code "fences"
-
-        ```
-        Sample text here...
-        ```
-
-        Syntax highlighting
-
-        ``` js
-        var foo = function (bar) {
-        return bar++;
-        };
-
-        console.log(foo(5));
-        ```
-
-        ## Tables
-
-        | Tables | Are | Cool |
-        | ------------- |:-------------:| -----:|
-        | **col 3 is** | right-aligned | $1600 |
-        | col 2 is | *centered* | $12 |
-        | zebra stripes | ~~are neat~~ | $1 |
-
-
-        ## Links
-
-        [link text](http://dev.nodeca.com)
-
-        [link with title](http://nodeca.github.io/pica/demo/ "title text!")
-
-
-
-        ## Images
-
-        ![Minion](https://octodex.github.com/images/minion.png)
-        ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
-
-        Like links, Images also have a footnote style syntax
-
-
-        ![The Dojocat](https://octodex.github.com/images/dojocat.jpg)
-
-        With a reference later in the document defining the URL location:
-
-        ![ID](URL "ALT TEXT")
-
-        ## Plugins
-
-
-
-
-        ### [Emojies](https://github.com/markdown-it/markdown-it-emoji)
-
-        :8ball:
-
-        > Classic markup: :wink: :cry: :laughing: :yum:
-        >
-
-
-        see [how to change a lightbulb](https://github.com/) or get rick rolled.
-
-
-
-
-        ### [Subscript](https://github.com/markdown-it/markdown-it-sub) /
-        [Superscript](https://github.com/markdown-it/markdown-it-sup)
-
-        - 19^th^
-        - H~2~O
-
-
-
-        ### [Footnotes NOT WORKING] (https://github.com/markdown-it/markdown-it-footnote)
-
-        Footnote 1 link[^first].
-
-        Footnote 2 link[^second].
-
-        Inline footnote^[Text of inline footnote] definition.
-
-        Duplicated footnote reference[^second].
-
-        [^first]: Footnote **can have markup**
-
-        and multiple paragraphs.
-
-        [^second]: Footnote text.
-
-      </md>
-    </article>
   </main>
 
 
@@ -375,20 +183,10 @@
 
 
 
-
-
   <footer>
-    <p>Simply Docs was created by <a href="https://github.com/MarketingPipeline/">Marketing Pipeline</a> and is licensed
-      under the MIT license.</p>
-    <small>© 2014 Some company name</small>
-    <address>email@email.com</address>
+    <p>Released under the MIT License.</p>
+    <small>© 2025 Extendx</small>
   </footer>
-
-
-
-
-
-
 
 
   <!-- Cool scroll effect from this guy: https://gist.github.com/flesler/ -->
