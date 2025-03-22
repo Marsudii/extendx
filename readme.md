@@ -5,8 +5,9 @@
   </a>
 </p>
 
-[![Github All Releases](https://img.shields.io/github/downloads/Marsudii/extendx/total.svg)]()
+![GitHub Release Date](https://img.shields.io/github/release-date/Marsudii/extendx)
 ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20MacOS%20%7C%20Linux-lightgrey)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/Marsudii/extendx/main)
 
 
 Stream Application Cross platforms
