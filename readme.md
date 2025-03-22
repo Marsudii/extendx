@@ -20,7 +20,7 @@ Stream Application Cross platforms
 
 
 ## About Extendx
-Extend is an open-source Go (Golang) based application designed to help streamers do screen sharing between devices/platforms without the need for a capture card.
+Extendx is an open-source Go (Golang) based application designed to help streamers do screen sharing between devices/platforms without the need for a capture card.
 - **📡.** Capture screen from macOS, Windows, or Linux.
 - **🔄.** Stream real-time to other devices over a local network (LAN).
 - **💻.** Display the captured results directly in the viewer application (without a browser).
