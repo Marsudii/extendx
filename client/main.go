@@ -1,66 +1,31 @@
+// ===============================
+// 🖥️ CLIENT (WINDOWS) - udp_screen_client.go
+// ===============================
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/binary"
-	"io"
+	"fmt"
 	"log"
 	"net"
-	"sync"
+	"os"
+	"strings"
 
 	"github.com/chai2010/webp"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-var conn net.Conn
-var currentImage *ebiten.Image
-var windowWidth, windowHeight = 640, 480 // Default awal agar tidak error
-var once sync.Once
+var (
+	currentImage              *ebiten.Image
+	windowWidth, windowHeight = 640, 480
+)
 
 type game struct{}
 
-func (g *game) Update() error {
-	// Baca total length frame (uint32)
-	var totalLen uint32
-	if err := binary.Read(conn, binary.BigEndian, &totalLen); err != nil {
-		return err
-	}
-
-	// Baca width dan height (masing-masing uint32)
-	var width, height uint32
-	if err := binary.Read(conn, binary.BigEndian, &width); err != nil {
-		return err
-	}
-	if err := binary.Read(conn, binary.BigEndian, &height); err != nil {
-		return err
-	}
-
-	// Baca frame data (WebP image)
-	imageData := make([]byte, totalLen-8)
-	_, err := io.ReadFull(conn, imageData)
-	if err != nil {
-		return err
-	}
-
-	// Decode WebP image
-	img, err := webp.Decode(bytes.NewReader(imageData))
-	if err != nil {
-		log.Println(" Decode WebP failed:", err)
-		return err
-	}
-
-	// Set ukuran window dari server (hanya sekali)
-	once.Do(func() {
-		windowWidth = int(width)
-		windowHeight = int(height)
-		ebiten.SetWindowSize(windowWidth, windowHeight)
-	})
-
-	currentImage = ebiten.NewImageFromImage(img)
-	return nil
-}
-
+func (g *game) Update() error { return nil }
 func (g *game) Draw(screen *ebiten.Image) {
 	if currentImage != nil {
 		screen.DrawImage(currentImage, nil)
@@ -68,27 +33,59 @@ func (g *game) Draw(screen *ebiten.Image) {
 		ebitenutil.DebugPrint(screen, "Waiting for frame...")
 	}
 }
-
 func (g *game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	// Cegah crash jika resolusi belum tersedia
-	if windowWidth <= 0 || windowHeight <= 0 {
-		return 640, 480
-	}
 	return windowWidth, windowHeight
 }
 
-func main() {
-	var err error
-
-	// Ganti IP sesuai IP server (Mac kamu)
-	conn, err = net.Dial("tcp", "10.10.10.7:8088")
+func startUDPListener(port string) {
+	addr, err := net.ResolveUDPAddr("udp", ":"+port)
 	if err != nil {
-		log.Fatal("Connection error:", err)
+		log.Fatal("UDP Resolve error:", err)
+	}
+	conn, err := net.ListenUDP("udp", addr)
+	if err != nil {
+		log.Fatal("UDP Listen error:", err)
 	}
 	defer conn.Close()
 
-	ebiten.SetWindowTitle(" Live Screen Viewer")
-	ebiten.SetWindowSize(windowWidth, windowHeight) // default awal
+	log.Println("📥 Listening for UDP screen packets on port", port)
+	buffer := make([]byte, 65535)
+	for {
+		n, _, err := conn.ReadFromUDP(buffer)
+		if err != nil {
+			log.Println("Read error:", err)
+			continue
+		}
+
+		go func(data []byte) {
+			if len(data) < 8 {
+				return
+			}
+			w := binary.BigEndian.Uint32(data[:4])
+			h := binary.BigEndian.Uint32(data[4:8])
+
+			img, err := webp.Decode(bytes.NewReader(data[8:n]))
+			if err != nil {
+				log.Println("❌ Decode error:", err)
+				return
+			}
+			windowWidth = int(w)
+			windowHeight = int(h)
+			currentImage = ebiten.NewImageFromImage(img)
+		}(append([]byte{}, buffer[:n]...))
+	}
+}
+
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Masukkan IP Server (Mac): ")
+	serverIP, _ := reader.ReadString('\n')
+	serverIP = strings.TrimSpace(serverIP)
+	fmt.Println("✅ Listening for screen stream from:", serverIP)
+
+	go startUDPListener("8088")
+	ebiten.SetWindowTitle("Live Screen via UDP")
+	ebiten.SetWindowSize(windowWidth, windowHeight)
 	if err := ebiten.RunGame(&game{}); err != nil {
 		log.Fatal(err)
 	}

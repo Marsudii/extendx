@@ -1,3 +1,6 @@
+// ===============================
+// 📡 SERVER (MAC) - udp_screen_server.go
+// ===============================
 package main
 
 import (
@@ -18,34 +21,24 @@ import (
 	"github.com/nfnt/resize"
 )
 
-// getLocalIP detects and returns the non-loopback local IP of the host
 func getLocalIP() (string, error) {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
 		return "", err
 	}
-
 	for _, addr := range addrs {
-		// Check if IP is IPV4 and not loopback
 		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 			if ipnet.IP.To4() != nil {
 				return ipnet.IP.String(), nil
 			}
 		}
 	}
-
 	return "", fmt.Errorf("no suitable local IP address found")
 }
 
 func chooseMonitor() int {
-	// Get local IP address
-	localIP, err := getLocalIP()
-	if err != nil {
-		log.Println("⚠️ Warning: Unable to auto-detect IP:", err)
-		localIP = "127.0.0.1" // Fallback to localhost
-	}
-
-	fmt.Print("IP LOCAL YOU: ", localIP, "\n")
+	localIP, _ := getLocalIP()
+	fmt.Println("IP LOCAL YOU:", localIP)
 	displayCount := screenshot.NumActiveDisplays()
 	fmt.Printf("🖥️ Available %d monitor:\n", displayCount)
 	for i := 0; i < displayCount; i++ {
@@ -59,48 +52,38 @@ func chooseMonitor() int {
 	input = strings.TrimSpace(input)
 	index, err := strconv.Atoi(input)
 	if err != nil || index < 0 || index >= displayCount {
-		log.Fatalf("❌ Input monitor not valid.")
+		log.Fatalf("❌ Invalid monitor selection")
 	}
 	return index
 }
 
 func main() {
-	quality := flag.Int("q", 100, "WebP quality (0-100)")
+	quality := flag.Int("q", 80, "WebP quality (0-100)")
 	width := flag.Int("w", 960, "Resize width")
 	height := flag.Int("h", 540, "Resize height")
-	port := flag.String("port", "8088", "Server port")
+	port := flag.String("port", "8088", "UDP port")
 	flag.Parse()
 
-	// Get local IP address
-	localIP, err := getLocalIP()
+	// Input IP tujuan (Windows client)
+	fmt.Print("Masukkan IP client (Windows): ")
+	reader := bufio.NewReader(os.Stdin)
+	targetIP, _ := reader.ReadString('\n')
+	targetIP = strings.TrimSpace(targetIP)
+
+	dstAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%s", targetIP, *port))
 	if err != nil {
-		log.Println("⚠️ Warning: Unable to auto-detect IP:", err)
-		localIP = "127.0.0.1" // Fallback to localhost
+		log.Fatal("ResolveUDPAddr error:", err)
 	}
 
-	display := chooseMonitor()
-
-	// Format port string for listening
-	listenAddr := fmt.Sprintf(":%s", *port)
-	ln, err := net.Listen("tcp", listenAddr)
+	conn, err := net.DialUDP("udp", nil, dstAddr)
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer ln.Close()
-
-	// Display connection info with detected IP
-	log.Println("🎥 Screen server started")
-	log.Printf("📡 Server address: %s:%s\n", localIP, *port)
-	log.Println("⏳ Waiting for client connection...")
-
-	conn, err := ln.Accept()
-	if err != nil {
-		log.Fatal(err)
+		log.Fatal("DialUDP error:", err)
 	}
 	defer conn.Close()
-	log.Println("✅ Client connected from:", conn.RemoteAddr())
+	display := chooseMonitor()
 
-	ticker := time.NewTicker(150 * time.Millisecond) // ~6 FPS stabil
+	log.Println("📡 UDP Screen Stream started to", dstAddr)
+	ticker := time.NewTicker(150 * time.Millisecond)
 	defer ticker.Stop()
 
 	for range ticker.C {
@@ -109,7 +92,6 @@ func main() {
 			log.Println("❌ Screenshot error:", err)
 			continue
 		}
-
 		resized := resize.Resize(uint(*width), uint(*height), img, resize.Lanczos3)
 		bounds := resized.Bounds()
 		w := uint32(bounds.Dx())
@@ -123,10 +105,15 @@ func main() {
 		}
 
 		frame := buf.Bytes()
-		totalLen := uint32(len(frame) + 8) // 4 byte width + 4 byte height + frame
-		binary.Write(conn, binary.BigEndian, totalLen)
-		binary.Write(conn, binary.BigEndian, w)
-		binary.Write(conn, binary.BigEndian, h)
-		conn.Write(frame)
+		if len(frame)+8 > 65507 {
+			log.Println("⚠️ Frame too large for UDP, skipped")
+			continue
+		}
+
+		packet := new(bytes.Buffer)
+		binary.Write(packet, binary.BigEndian, w)
+		binary.Write(packet, binary.BigEndian, h)
+		packet.Write(frame)
+		conn.Write(packet.Bytes())
 	}
 }
