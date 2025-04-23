@@ -1,0 +1,44 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go build cache
+/go.sum
+*.log
+
+# Go workspace
+bin/
+pkg/
+build/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Dependency tools
+vendor/
+
+# fyne build artifacts
+*.apk
+*.app
+*.ipa
+
+# Go module vendor cache
+*.mod
+
+# Optional: exclude config
+.env
+.env.local
+config.json
+*.key
+*.pem
