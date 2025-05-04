@@ -72,8 +72,25 @@ func main() {
 		}
 		labelResolution.SetText(fmt.Sprintf("Selected resolution: %dx%d", selectedWidth, selectedHeight))
 	})
+	// --- di dalam main(), setelah define window, monitorOptions, dll. ---
+	waitingLabel := widget.NewLabel("") // nanti kita update teks-nya
+	progress := widget.NewProgressBarInfinite()
 
 	submitButton := widget.NewButton("Start Capture", func() {
+
+		// 1) Siapkan konten “waiting”
+		waitingLabel.SetText("Waiting for client to connect at " + localIP + ":9090 …")
+		waitingLabel.Refresh()
+
+		waitingContainer := container.NewVBox(
+			widget.NewLabel("EXTENDX (SERVER - WINDOWS)"),
+			waitingLabel,
+			progress,
+		)
+
+		// 2) Ganti seluruh content window ke waitingContainer
+		window.SetContent(waitingContainer)
+
 		go StartCapture(localIP)
 	})
 
