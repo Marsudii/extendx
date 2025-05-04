@@ -34,7 +34,7 @@ vendor/
 *.ipa
 
 # Go module vendor cache
-*.mod
+
 
 # Optional: exclude config
 .env
