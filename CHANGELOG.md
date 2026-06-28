@@ -1,3 +1,6 @@
+# Change language to rust
+- init project with rust
+
 # Fix UI (v.1.0.1)
 - UI Client (MAC and WIN)
 - Client Apps Input Manual (MAC and WIN)
